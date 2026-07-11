@@ -1,0 +1,399 @@
+<!DOCTYPE html>
+<html lang="th">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>คลังแบบทดสอบ</title>
+  <link href="https://fonts.googleapis.com/css2?family=Sarabun:wght@400;600;700&family=IBM+Plex+Sans+Thai:wght@400;500;700&display=swap" rel="stylesheet" />
+  <style>
+    :root {
+      --bg: #F0F4FF;
+      --surface: #FFFFFF;
+      --primary: #3B6FE8;
+      --primary-dark: #2A57C8;
+      --accent: #F5C842;
+      --text: #1A1D2E;
+      --text-muted: #6B7280;
+      --border: #E2E8F0;
+      --shadow: 0 4px 24px rgba(59,111,232,0.10);
+      --radius: 16px;
+    }
+
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+
+    body {
+      font-family: 'Sarabun', sans-serif;
+      background: var(--bg);
+      color: var(--text);
+      min-height: 100vh;
+    }
+
+    /* ===== HEADER ===== */
+    header {
+      background: linear-gradient(135deg, #1E3A8A 0%, #3B6FE8 60%, #60A5FA 100%);
+      padding: 48px 24px 80px;
+      text-align: center;
+      position: relative;
+      overflow: hidden;
+    }
+
+    header::before {
+      content: '';
+      position: absolute;
+      top: -60px; right: -60px;
+      width: 280px; height: 280px;
+      background: rgba(255,255,255,0.06);
+      border-radius: 50%;
+    }
+
+    header::after {
+      content: '';
+      position: absolute;
+      bottom: -80px; left: -40px;
+      width: 220px; height: 220px;
+      background: rgba(245,200,66,0.12);
+      border-radius: 50%;
+    }
+
+    .header-icon {
+      font-size: 48px;
+      margin-bottom: 12px;
+      display: block;
+      position: relative;
+      z-index: 1;
+    }
+
+    header h1 {
+      font-family: 'IBM Plex Sans Thai', sans-serif;
+      font-size: clamp(1.8rem, 5vw, 2.8rem);
+      font-weight: 700;
+      color: #fff;
+      letter-spacing: -0.5px;
+      position: relative;
+      z-index: 1;
+    }
+
+    header p {
+      margin-top: 10px;
+      color: rgba(255,255,255,0.75);
+      font-size: 1.05rem;
+      position: relative;
+      z-index: 1;
+    }
+
+    /* ===== SEARCH BAR ===== */
+    .search-wrap {
+      max-width: 520px;
+      margin: -28px auto 0;
+      padding: 0 16px;
+      position: relative;
+      z-index: 10;
+    }
+
+    .search-wrap input {
+      width: 100%;
+      padding: 16px 20px 16px 48px;
+      border-radius: 50px;
+      border: 2px solid transparent;
+      box-shadow: var(--shadow), 0 0 0 2px rgba(59,111,232,0.1);
+      font-family: 'Sarabun', sans-serif;
+      font-size: 1rem;
+      outline: none;
+      background: #fff;
+      color: var(--text);
+      transition: border-color 0.2s;
+    }
+
+    .search-wrap input:focus {
+      border-color: var(--primary);
+    }
+
+    .search-wrap::before {
+      content: '🔍';
+      position: absolute;
+      left: 32px;
+      top: 50%;
+      transform: translateY(-50%);
+      font-size: 1rem;
+      pointer-events: none;
+    }
+
+    /* ===== MAIN CONTENT ===== */
+    main {
+      max-width: 1200px;
+      margin: 0 auto;
+      padding: 48px 20px 60px;
+    }
+
+    .stats-bar {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      margin-bottom: 28px;
+    }
+
+    .stats-bar span {
+      font-size: 0.9rem;
+      color: var(--text-muted);
+    }
+
+    .count-badge {
+      background: var(--primary);
+      color: #fff;
+      font-size: 0.8rem;
+      font-weight: 700;
+      padding: 2px 10px;
+      border-radius: 50px;
+    }
+
+    /* ===== GRID ===== */
+    .grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+      gap: 24px;
+    }
+
+    /* ===== CARD ===== */
+    .card {
+      background: var(--surface);
+      border-radius: var(--radius);
+      overflow: hidden;
+      box-shadow: var(--shadow);
+      transition: transform 0.22s ease, box-shadow 0.22s ease;
+      display: flex;
+      flex-direction: column;
+      border: 1px solid var(--border);
+    }
+
+    .card:hover {
+      transform: translateY(-6px);
+      box-shadow: 0 12px 36px rgba(59,111,232,0.18);
+    }
+
+    .card-image-wrap {
+      position: relative;
+      width: 100%;
+      aspect-ratio: 16/9;
+      background: linear-gradient(135deg, #EEF2FF, #DBEAFE);
+      overflow: hidden;
+    }
+
+    .card-image-wrap img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      transition: transform 0.3s ease;
+    }
+
+    .card:hover .card-image-wrap img {
+      transform: scale(1.04);
+    }
+
+    .img-placeholder {
+      width: 100%;
+      height: 100%;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      color: #93B4E8;
+      gap: 8px;
+    }
+
+    .img-placeholder .icon { font-size: 2.5rem; }
+    .img-placeholder .label { font-size: 0.8rem; }
+
+    .card-tag {
+      position: absolute;
+      top: 12px;
+      left: 12px;
+      background: rgba(245,200,66,0.92);
+      color: #1A1D2E;
+      font-size: 0.72rem;
+      font-weight: 700;
+      padding: 4px 10px;
+      border-radius: 50px;
+      letter-spacing: 0.4px;
+    }
+
+    .card-body {
+      padding: 20px;
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+    }
+
+    .card-title {
+      font-family: 'IBM Plex Sans Thai', sans-serif;
+      font-size: 1.05rem;
+      font-weight: 700;
+      color: var(--text);
+      line-height: 1.4;
+    }
+
+    .card-btn {
+      margin-top: auto;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+      background: var(--primary);
+      color: #fff;
+      text-decoration: none;
+      font-weight: 600;
+      font-size: 0.95rem;
+      padding: 12px 20px;
+      border-radius: 10px;
+      transition: background 0.18s, transform 0.12s;
+    }
+
+    .card-btn:hover {
+      background: var(--primary-dark);
+      transform: scale(1.02);
+    }
+
+    /* ===== STATES ===== */
+    .loading, .empty-state, .error-state {
+      text-align: center;
+      padding: 80px 20px;
+      color: var(--text-muted);
+    }
+
+    .spinner {
+      width: 44px;
+      height: 44px;
+      border: 4px solid #E0E8FF;
+      border-top-color: var(--primary);
+      border-radius: 50%;
+      animation: spin 0.8s linear infinite;
+      margin: 0 auto 20px;
+    }
+
+    @keyframes spin { to { transform: rotate(360deg); } }
+
+    .empty-state .big-icon, .error-state .big-icon {
+      font-size: 3.5rem;
+      margin-bottom: 16px;
+    }
+
+    /* ===== FOOTER ===== */
+    footer {
+      text-align: center;
+      padding: 24px;
+      color: var(--text-muted);
+      font-size: 0.85rem;
+      border-top: 1px solid var(--border);
+    }
+
+    footer a {
+      color: var(--primary);
+      text-decoration: none;
+      font-weight: 600;
+    }
+  </style>
+</head>
+<body>
+
+<header>
+  <span class="header-icon">📋</span>
+  <h1>คลังแบบทดสอบ</h1>
+  <p>รวมแบบทดสอบออนไลน์ ครบในที่เดียว</p>
+</header>
+
+<div class="search-wrap">
+  <input type="text" id="searchInput" placeholder="ค้นหาแบบทดสอบ..." />
+</div>
+
+<main>
+  <div class="stats-bar">
+    <span>แบบทดสอบทั้งหมด</span>
+    <span class="count-badge" id="countBadge">–</span>
+  </div>
+
+  <div class="grid" id="grid">
+    <div class="loading">
+      <div class="spinner"></div>
+      <p>กำลังโหลดข้อมูล...</p>
+    </div>
+  </div>
+</main>
+
+<footer>
+  <p>จัดการข้อมูล → <a href="admin.html">หน้าแอดมิน</a></p>
+</footer>
+
+<script>
+  // 🔧 ใส่ URL ของ Apps Script ที่ Deploy แล้วตรงนี้
+  const API_URL = "https://script.google.com/macros/s/AKfycbx_ENJmWWIdvcXVyJHZvOeF2BLP6ZmpE7cu77EHHctnt_ge4x21v8_2sT92PLVTkmOW/exec";
+
+  let allItems = [];
+
+  async function loadData() {
+    try {
+      const res = await fetch(API_URL);
+      const json = await res.json();
+      if (json.success) {
+        allItems = json.data.reverse(); // ใหม่สุดขึ้นก่อน
+        renderCards(allItems);
+        document.getElementById("countBadge").textContent = allItems.length;
+      } else {
+        showError();
+      }
+    } catch (err) {
+      showError();
+    }
+  }
+
+  function renderCards(items) {
+    const grid = document.getElementById("grid");
+    if (items.length === 0) {
+      grid.innerHTML = `
+        <div class="empty-state" style="grid-column:1/-1">
+          <div class="big-icon">🗂️</div>
+          <p>ยังไม่มีแบบทดสอบในระบบ</p>
+        </div>`;
+      return;
+    }
+    grid.innerHTML = items.map(item => `
+      <div class="card">
+        <div class="card-image-wrap">
+          ${item.imageUrl
+            ? `<img src="${escHtml(item.imageUrl)}" alt="${escHtml(item.name)}" onerror="this.parentElement.innerHTML='<div class=\'img-placeholder\'><span class=\'icon\'>📝</span><span class=\'label\'>ไม่มีรูปภาพ</span></div>'" />`
+            : `<div class="img-placeholder"><span class="icon">📝</span><span class="label">ไม่มีรูปภาพ</span></div>`}
+          <span class="card-tag">Google Form</span>
+        </div>
+        <div class="card-body">
+          <div class="card-title">${escHtml(item.name)}</div>
+          <a class="card-btn" href="${escHtml(item.formUrl)}" target="_blank" rel="noopener">
+            ✏️ เริ่มทำแบบทดสอบ
+          </a>
+        </div>
+      </div>
+    `).join("");
+  }
+
+  function showError() {
+    document.getElementById("grid").innerHTML = `
+      <div class="error-state" style="grid-column:1/-1">
+        <div class="big-icon">⚠️</div>
+        <p>โหลดข้อมูลไม่สำเร็จ กรุณาตรวจสอบ API URL</p>
+      </div>`;
+  }
+
+  function escHtml(str) {
+    return str?.replace(/&/g,"&amp;").replace(/</g,"&lt;").replace(/>/g,"&gt;").replace(/"/g,"&quot;") || "";
+  }
+
+  // Search
+  document.getElementById("searchInput").addEventListener("input", e => {
+    const q = e.target.value.toLowerCase();
+    const filtered = allItems.filter(i => i.name.toLowerCase().includes(q));
+    renderCards(filtered);
+    document.getElementById("countBadge").textContent = filtered.length;
+  });
+
+  loadData();
+</script>
+</body>
+</html>
