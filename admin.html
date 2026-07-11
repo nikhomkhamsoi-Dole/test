@@ -5,6 +5,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>แอดมิน – คลังแบบทดสอบ</title>
   <link href="https://fonts.googleapis.com/css2?family=Sarabun:wght@400;600;700&family=IBM+Plex+Sans+Thai:wght@400;500;700&display=swap" rel="stylesheet" />
+  <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
   <style>
     :root {
       --bg: #F0F4FF;
@@ -14,6 +15,7 @@
       --danger: #EF4444;
       --danger-dark: #DC2626;
       --success: #10B981;
+      --fb: #1877F2;
       --text: #1A1D2E;
       --text-muted: #6B7280;
       --border: #E2E8F0;
@@ -29,7 +31,7 @@
       min-height: 100vh;
     }
 
-    /* ===== LOGIN OVERLAY ===== */
+    /* ===== LOGIN ===== */
     #loginOverlay {
       position: fixed;
       inset: 0;
@@ -56,14 +58,9 @@
       font-size: 1.4rem;
       font-weight: 700;
       margin-bottom: 4px;
-      color: var(--text);
     }
 
-    .login-box p {
-      font-size: 0.88rem;
-      color: var(--text-muted);
-      margin-bottom: 24px;
-    }
+    .login-box p { font-size: 0.88rem; color: var(--text-muted); margin-bottom: 24px; }
 
     .login-box input {
       width: 100%;
@@ -96,29 +93,23 @@
     }
 
     .login-box button:hover { background: var(--primary-dark); }
-
-    .login-error {
-      color: var(--danger);
-      font-size: 0.85rem;
-      margin-top: 10px;
-      min-height: 20px;
-    }
+    .login-error { color: var(--danger); font-size: 0.85rem; margin-top: 10px; min-height: 20px; }
 
     /* ===== HEADER ===== */
     header {
-      background: linear-gradient(135deg, #1E3A8A 0%, #3B6FE8 100%);
-      padding: 28px 24px;
+      background: linear-gradient(135deg, #1E3A8A, #3B6FE8);
+      padding: 22px 24px;
       display: flex;
       align-items: center;
       justify-content: space-between;
       gap: 12px;
     }
 
-    .header-left { display: flex; align-items: center; gap: 12px; }
+    .header-left { display: flex; align-items: center; gap: 10px; }
 
     header h1 {
       font-family: 'IBM Plex Sans Thai', sans-serif;
-      font-size: 1.4rem;
+      font-size: 1.3rem;
       font-weight: 700;
       color: #fff;
     }
@@ -126,7 +117,7 @@
     header .back-link {
       color: rgba(255,255,255,0.8);
       text-decoration: none;
-      font-size: 0.9rem;
+      font-size: 0.88rem;
       display: flex;
       align-items: center;
       gap: 6px;
@@ -136,27 +127,23 @@
       transition: background 0.18s;
     }
 
-    header .back-link:hover { background: rgba(255,255,255,0.2); }
+    header .back-link:hover { background: rgba(255,255,255,0.22); }
 
     /* ===== MAIN ===== */
-    main {
-      max-width: 860px;
-      margin: 0 auto;
-      padding: 36px 20px 60px;
-    }
+    main { max-width: 860px; margin: 0 auto; padding: 32px 20px 60px; }
 
-    /* ===== ADD FORM CARD ===== */
+    /* ===== CARD ===== */
     .card {
       background: var(--surface);
       border-radius: var(--radius);
       border: 1px solid var(--border);
       overflow: hidden;
       box-shadow: 0 4px 20px rgba(59,111,232,0.08);
-      margin-bottom: 32px;
+      margin-bottom: 28px;
     }
 
     .card-header {
-      padding: 20px 28px 16px;
+      padding: 18px 24px 14px;
       border-bottom: 1px solid var(--border);
       display: flex;
       align-items: center;
@@ -165,26 +152,25 @@
 
     .card-header h2 {
       font-family: 'IBM Plex Sans Thai', sans-serif;
-      font-size: 1.1rem;
+      font-size: 1.05rem;
       font-weight: 700;
     }
 
-    .card-body { padding: 28px; }
+    .card-body { padding: 24px; }
 
     label {
       display: block;
-      font-size: 0.9rem;
-      font-weight: 600;
+      font-size: 0.88rem;
+      font-weight: 700;
       color: var(--text);
-      margin-bottom: 7px;
+      margin-bottom: 6px;
     }
 
-    .field { margin-bottom: 20px; }
+    .field { margin-bottom: 18px; }
 
-    input[type="text"],
-    input[type="url"] {
+    input[type="text"], input[type="url"] {
       width: 100%;
-      padding: 12px 16px;
+      padding: 11px 14px;
       border: 2px solid var(--border);
       border-radius: 10px;
       font-family: 'Sarabun', sans-serif;
@@ -195,14 +181,52 @@
       transition: border-color 0.18s, background 0.18s;
     }
 
-    input:focus {
-      border-color: var(--primary);
-      background: #fff;
-    }
+    input:focus { border-color: var(--primary); background: #fff; }
 
     .hint { font-size: 0.78rem; color: var(--text-muted); margin-top: 5px; }
 
-    /* Preview Image */
+    /* Image upload helper */
+    .upload-helper {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      margin-top: 8px;
+      flex-wrap: wrap;
+    }
+
+    .btn-upload-img {
+      display: inline-flex;
+      align-items: center;
+      gap: 7px;
+      padding: 9px 16px;
+      background: #FF6B35;
+      color: #fff;
+      border: none;
+      border-radius: 8px;
+      font-family: 'Sarabun', sans-serif;
+      font-size: 0.88rem;
+      font-weight: 700;
+      cursor: pointer;
+      text-decoration: none;
+      transition: background 0.18s, transform 0.12s;
+    }
+
+    .btn-upload-img:hover { background: #E55A25; transform: scale(1.02); }
+
+    .upload-steps {
+      background: #FFF7ED;
+      border: 1.5px solid #FED7AA;
+      border-radius: 10px;
+      padding: 12px 16px;
+      margin-top: 10px;
+      font-size: 0.84rem;
+      color: #92400E;
+      line-height: 1.8;
+    }
+
+    .upload-steps strong { color: #C2410C; }
+
+    /* Preview */
     .preview-box {
       margin-top: 10px;
       border-radius: 10px;
@@ -217,6 +241,7 @@
 
     .preview-box img { width: 100%; height: 100%; object-fit: cover; }
 
+    /* Buttons */
     .btn-submit {
       display: inline-flex;
       align-items: center;
@@ -237,38 +262,14 @@
     .btn-submit:active { transform: scale(0.97); }
     .btn-submit:disabled { opacity: 0.6; cursor: not-allowed; }
 
-    /* ===== TOAST ===== */
-    #toast {
-      position: fixed;
-      bottom: 28px;
-      left: 50%;
-      transform: translateX(-50%) translateY(80px);
-      background: #1A1D2E;
-      color: #fff;
-      padding: 13px 22px;
-      border-radius: 50px;
-      font-size: 0.95rem;
-      font-weight: 600;
-      transition: transform 0.3s ease;
-      z-index: 500;
-      white-space: nowrap;
-    }
-
-    #toast.show { transform: translateX(-50%) translateY(0); }
-    #toast.success { background: var(--success); }
-    #toast.error { background: var(--danger); }
-
     /* ===== TABLE ===== */
     .table-wrap { overflow-x: auto; }
 
-    table {
-      width: 100%;
-      border-collapse: collapse;
-    }
+    table { width: 100%; border-collapse: collapse; }
 
     th {
       text-align: left;
-      font-size: 0.8rem;
+      font-size: 0.78rem;
       font-weight: 700;
       color: var(--text-muted);
       text-transform: uppercase;
@@ -278,27 +279,24 @@
     }
 
     td {
-      padding: 14px 16px;
+      padding: 13px 16px;
       border-bottom: 1px solid var(--border);
       vertical-align: middle;
-      font-size: 0.92rem;
+      font-size: 0.91rem;
     }
 
     tr:last-child td { border-bottom: none; }
-
     tr:hover td { background: #F8FAFF; }
 
     .thumb {
-      width: 60px;
-      height: 40px;
+      width: 60px; height: 40px;
       border-radius: 6px;
       object-fit: cover;
       background: #EEF2FF;
     }
 
     .no-thumb {
-      width: 60px;
-      height: 40px;
+      width: 60px; height: 40px;
       border-radius: 6px;
       background: #EEF2FF;
       display: flex;
@@ -327,17 +325,25 @@
       transition: all 0.15s;
     }
 
-    .btn-delete:hover {
-      background: var(--danger);
-      color: #fff;
-    }
+    .btn-delete:hover { background: var(--danger); color: #fff; }
 
     .name-cell { font-weight: 700; max-width: 200px; }
 
-    .empty-row td {
+    .empty-row td { text-align: center; color: var(--text-muted); padding: 40px; }
+
+    /* ===== FOOTER ===== */
+    footer {
+      background: #1E3A8A;
+      color: rgba(255,255,255,0.75);
       text-align: center;
-      color: var(--text-muted);
-      padding: 40px;
+      padding: 20px;
+      font-size: 0.85rem;
+    }
+
+    footer .footer-title {
+      font-weight: 700;
+      color: #fff;
+      font-size: 0.95rem;
     }
   </style>
 </head>
@@ -366,7 +372,7 @@
 
 <main>
 
-  <!-- ADD FORM CARD -->
+  <!-- ADD FORM -->
   <div class="card">
     <div class="card-header">
       <span>➕</span>
@@ -375,7 +381,7 @@
     <div class="card-body">
       <div class="field">
         <label>ชื่อแบบทดสอบ *</label>
-        <input type="text" id="inputName" placeholder="เช่น แบบทดสอบวิชาคณิตศาสตร์ บทที่ 1" />
+        <input type="text" id="inputName" placeholder="เช่น แบบทดสอบวิชาวิทยาศาสตร์ บทที่ 1" />
       </div>
 
       <div class="field">
@@ -385,11 +391,23 @@
 
       <div class="field">
         <label>ลิงก์ภาพตัวอย่าง</label>
-        <input type="url" id="inputImageUrl" placeholder="https://..." oninput="previewImage(this.value)" />
-        <div class="hint">แนะนำ: อัปโหลดรูปลง Google Drive แล้วเปลี่ยนเป็นลิงก์ direct (หรือใช้ imgur.com)</div>
+        <div class="upload-steps">
+          📌 <strong>วิธีอัปโหลดรูป:</strong><br>
+          1. กดปุ่มด้านล่างเพื่อเปิด PostImages<br>
+          2. เลือกรูปภาพแล้วอัปโหลด<br>
+          3. คัดลอก <strong>"ลิงก์ตรง (Direct Link)"</strong> มาวางในช่องด้านล่าง<br>
+          <span style="color:#B45309">⚠️ ให้เลือกเฉพาะช่อง "Direct link" เท่านั้น</span>
+        </div>
+        <div class="upload-helper">
+          <a class="btn-upload-img" href="https://postimages.org/" target="_blank" rel="noopener">
+            🖼️ อัปโหลดรูปภาพ (PostImages)
+          </a>
+        </div>
+        <input type="url" id="inputImageUrl" placeholder="วางลิงก์ตรงจาก PostImages ที่นี่..." style="margin-top:10px" oninput="previewImage(this.value)" />
         <div class="preview-box" id="previewBox">
           <img id="previewImg" alt="ตัวอย่าง" />
         </div>
+        <div class="hint">💡 ตัวอย่างลิงก์ตรง: https://i.postimg.cc/xxxxxxxx/image.jpg</div>
       </div>
 
       <button class="btn-submit" id="submitBtn" onclick="addForm()">
@@ -398,7 +416,7 @@
     </div>
   </div>
 
-  <!-- LIST CARD -->
+  <!-- LIST -->
   <div class="card">
     <div class="card-header">
       <span>📋</span>
@@ -425,7 +443,10 @@
 
 </main>
 
-<div id="toast"></div>
+<footer>
+  <div class="footer-title">ศูนย์ส่งเสริมการเรียนรู้ระดับอำเภอนิคมคำสร้อย</div>
+  <div>ระบบจัดการคลังแบบทดสอบออนไลน์</div>
+</footer>
 
 <script>
   // 🔧 ใส่ URL ของ Apps Script ที่ Deploy แล้วตรงนี้
@@ -441,8 +462,23 @@
       savedPassword = pw;
       document.getElementById("loginOverlay").style.display = "none";
       loadData();
+      Swal.fire({
+        title: '✅ เข้าสู่ระบบสำเร็จ',
+        text: 'ยินดีต้อนรับสู่ระบบจัดการแบบทดสอบ',
+        icon: 'success',
+        timer: 1800,
+        showConfirmButton: false,
+        customClass: { popup: 'swal-thai' }
+      });
     } else {
       document.getElementById("loginError").textContent = "รหัสผ่านไม่ถูกต้อง";
+      Swal.fire({
+        title: 'รหัสผ่านไม่ถูกต้อง',
+        text: 'กรุณาตรวจสอบรหัสผ่านอีกครั้ง',
+        icon: 'error',
+        confirmButtonText: 'ลองใหม่',
+        confirmButtonColor: '#EF4444',
+      });
     }
   }
 
@@ -450,7 +486,7 @@
     if (e.key === "Enter") checkLogin();
   });
 
-  /* ===== LOAD DATA ===== */
+  /* ===== LOAD ===== */
   async function loadData() {
     try {
       const res = await fetch(API_URL);
@@ -474,13 +510,13 @@
       <tr>
         <td>
           ${item.imageUrl
-            ? `<img class="thumb" src="${escHtml(item.imageUrl)}" alt="" onerror="this.outerHTML='<div class=\'no-thumb\'>📝</div>'" />`
+            ? `<img class="thumb" src="${escHtml(item.imageUrl)}" alt="" onerror="this.outerHTML='<div class=\\'no-thumb\\'>📝</div>'" />`
             : `<div class="no-thumb">📝</div>`}
         </td>
         <td class="name-cell">${escHtml(item.name)}</td>
         <td class="link-cell"><a href="${escHtml(item.formUrl)}" target="_blank">เปิดฟอร์ม ↗</a></td>
         <td>
-          <button class="btn-delete" onclick="deleteForm('${escAttr(item.timestamp)}')">ลบ</button>
+          <button class="btn-delete" onclick="confirmDelete('${escAttr(item.timestamp)}', '${escAttr(item.name)}')">ลบ</button>
         </td>
       </tr>
     `).join("");
@@ -493,7 +529,13 @@
     const imageUrl = document.getElementById("inputImageUrl").value.trim();
 
     if (!name || !formUrl) {
-      showToast("กรุณากรอกชื่อและลิงก์ฟอร์ม", "error");
+      Swal.fire({
+        title: 'กรุณากรอกข้อมูลให้ครบ',
+        text: 'ชื่อแบบทดสอบและลิงก์ Google Form จำเป็นต้องกรอก',
+        icon: 'warning',
+        confirmButtonText: 'ตกลง',
+        confirmButtonColor: '#3B6FE8',
+      });
       return;
     }
 
@@ -508,17 +550,23 @@
       });
       const json = await res.json();
       if (json.success) {
-        showToast("เพิ่มแบบทดสอบสำเร็จ ✓", "success");
+        Swal.fire({
+          title: '✅ เพิ่มสำเร็จ!',
+          text: `เพิ่ม "${name}" เรียบร้อยแล้ว`,
+          icon: 'success',
+          confirmButtonText: 'ตกลง',
+          confirmButtonColor: '#10B981',
+        });
         document.getElementById("inputName").value = "";
         document.getElementById("inputFormUrl").value = "";
         document.getElementById("inputImageUrl").value = "";
         document.getElementById("previewBox").style.display = "none";
         loadData();
       } else {
-        showToast(json.message || "เกิดข้อผิดพลาด", "error");
+        Swal.fire({ title: 'เกิดข้อผิดพลาด', text: json.message, icon: 'error', confirmButtonColor: '#EF4444' });
       }
     } catch (err) {
-      showToast("ไม่สามารถเชื่อมต่อได้", "error");
+      Swal.fire({ title: 'ไม่สามารถเชื่อมต่อได้', text: 'กรุณาตรวจสอบ API URL', icon: 'error', confirmButtonColor: '#EF4444' });
     }
 
     btn.disabled = false;
@@ -526,21 +574,33 @@
   }
 
   /* ===== DELETE ===== */
-  async function deleteForm(timestamp) {
-    if (!confirm("ต้องการลบรายการนี้?")) return;
-    try {
-      const res = await fetch(API_URL, {
-        method: "POST",
-        body: JSON.stringify({ action: "delete", password: savedPassword, timestamp })
-      });
-      const json = await res.json();
-      if (json.success) {
-        showToast("ลบสำเร็จ", "success");
-        loadData();
+  function confirmDelete(timestamp, name) {
+    Swal.fire({
+      title: 'ยืนยันการลบ?',
+      html: `ต้องการลบ <b>"${escHtml(name)}"</b> ออกจากระบบ?`,
+      icon: 'warning',
+      showCancelButton: true,
+      confirmButtonText: '🗑️ ลบเลย',
+      cancelButtonText: 'ยกเลิก',
+      confirmButtonColor: '#EF4444',
+      cancelButtonColor: '#9CA3AF',
+    }).then(async result => {
+      if (result.isConfirmed) {
+        try {
+          const res = await fetch(API_URL, {
+            method: "POST",
+            body: JSON.stringify({ action: "delete", password: savedPassword, timestamp })
+          });
+          const json = await res.json();
+          if (json.success) {
+            Swal.fire({ title: 'ลบสำเร็จ!', icon: 'success', timer: 1500, showConfirmButton: false });
+            loadData();
+          }
+        } catch (err) {
+          Swal.fire({ title: 'เกิดข้อผิดพลาด', icon: 'error' });
+        }
       }
-    } catch (err) {
-      showToast("เกิดข้อผิดพลาด", "error");
-    }
+    });
   }
 
   /* ===== PREVIEW ===== */
@@ -554,14 +614,6 @@
     } else {
       box.style.display = "none";
     }
-  }
-
-  /* ===== TOAST ===== */
-  function showToast(msg, type = "") {
-    const t = document.getElementById("toast");
-    t.textContent = msg;
-    t.className = "show " + type;
-    setTimeout(() => { t.className = ""; }, 3000);
   }
 
   function escHtml(str) {
