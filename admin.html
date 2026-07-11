@@ -1,0 +1,576 @@
+<!DOCTYPE html>
+<html lang="th">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>แอดมิน – คลังแบบทดสอบ</title>
+  <link href="https://fonts.googleapis.com/css2?family=Sarabun:wght@400;600;700&family=IBM+Plex+Sans+Thai:wght@400;500;700&display=swap" rel="stylesheet" />
+  <style>
+    :root {
+      --bg: #F0F4FF;
+      --surface: #FFFFFF;
+      --primary: #3B6FE8;
+      --primary-dark: #2A57C8;
+      --danger: #EF4444;
+      --danger-dark: #DC2626;
+      --success: #10B981;
+      --text: #1A1D2E;
+      --text-muted: #6B7280;
+      --border: #E2E8F0;
+      --radius: 16px;
+    }
+
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+
+    body {
+      font-family: 'Sarabun', sans-serif;
+      background: var(--bg);
+      color: var(--text);
+      min-height: 100vh;
+    }
+
+    /* ===== LOGIN OVERLAY ===== */
+    #loginOverlay {
+      position: fixed;
+      inset: 0;
+      background: linear-gradient(135deg, #1E3A8A, #3B6FE8);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      z-index: 1000;
+    }
+
+    .login-box {
+      background: #fff;
+      border-radius: 20px;
+      padding: 40px 36px;
+      width: 340px;
+      text-align: center;
+      box-shadow: 0 20px 60px rgba(0,0,0,0.25);
+    }
+
+    .login-box .lock { font-size: 3rem; margin-bottom: 8px; }
+
+    .login-box h2 {
+      font-family: 'IBM Plex Sans Thai', sans-serif;
+      font-size: 1.4rem;
+      font-weight: 700;
+      margin-bottom: 4px;
+      color: var(--text);
+    }
+
+    .login-box p {
+      font-size: 0.88rem;
+      color: var(--text-muted);
+      margin-bottom: 24px;
+    }
+
+    .login-box input {
+      width: 100%;
+      padding: 13px 16px;
+      border: 2px solid var(--border);
+      border-radius: 10px;
+      font-family: 'Sarabun', sans-serif;
+      font-size: 1rem;
+      outline: none;
+      margin-bottom: 14px;
+      transition: border-color 0.2s;
+      letter-spacing: 2px;
+      text-align: center;
+    }
+
+    .login-box input:focus { border-color: var(--primary); }
+
+    .login-box button {
+      width: 100%;
+      padding: 13px;
+      background: var(--primary);
+      color: #fff;
+      border: none;
+      border-radius: 10px;
+      font-family: 'Sarabun', sans-serif;
+      font-size: 1rem;
+      font-weight: 700;
+      cursor: pointer;
+      transition: background 0.18s;
+    }
+
+    .login-box button:hover { background: var(--primary-dark); }
+
+    .login-error {
+      color: var(--danger);
+      font-size: 0.85rem;
+      margin-top: 10px;
+      min-height: 20px;
+    }
+
+    /* ===== HEADER ===== */
+    header {
+      background: linear-gradient(135deg, #1E3A8A 0%, #3B6FE8 100%);
+      padding: 28px 24px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 12px;
+    }
+
+    .header-left { display: flex; align-items: center; gap: 12px; }
+
+    header h1 {
+      font-family: 'IBM Plex Sans Thai', sans-serif;
+      font-size: 1.4rem;
+      font-weight: 700;
+      color: #fff;
+    }
+
+    header .back-link {
+      color: rgba(255,255,255,0.8);
+      text-decoration: none;
+      font-size: 0.9rem;
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      padding: 8px 14px;
+      background: rgba(255,255,255,0.12);
+      border-radius: 8px;
+      transition: background 0.18s;
+    }
+
+    header .back-link:hover { background: rgba(255,255,255,0.2); }
+
+    /* ===== MAIN ===== */
+    main {
+      max-width: 860px;
+      margin: 0 auto;
+      padding: 36px 20px 60px;
+    }
+
+    /* ===== ADD FORM CARD ===== */
+    .card {
+      background: var(--surface);
+      border-radius: var(--radius);
+      border: 1px solid var(--border);
+      overflow: hidden;
+      box-shadow: 0 4px 20px rgba(59,111,232,0.08);
+      margin-bottom: 32px;
+    }
+
+    .card-header {
+      padding: 20px 28px 16px;
+      border-bottom: 1px solid var(--border);
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+
+    .card-header h2 {
+      font-family: 'IBM Plex Sans Thai', sans-serif;
+      font-size: 1.1rem;
+      font-weight: 700;
+    }
+
+    .card-body { padding: 28px; }
+
+    label {
+      display: block;
+      font-size: 0.9rem;
+      font-weight: 600;
+      color: var(--text);
+      margin-bottom: 7px;
+    }
+
+    .field { margin-bottom: 20px; }
+
+    input[type="text"],
+    input[type="url"] {
+      width: 100%;
+      padding: 12px 16px;
+      border: 2px solid var(--border);
+      border-radius: 10px;
+      font-family: 'Sarabun', sans-serif;
+      font-size: 0.95rem;
+      outline: none;
+      background: var(--bg);
+      color: var(--text);
+      transition: border-color 0.18s, background 0.18s;
+    }
+
+    input:focus {
+      border-color: var(--primary);
+      background: #fff;
+    }
+
+    .hint { font-size: 0.78rem; color: var(--text-muted); margin-top: 5px; }
+
+    /* Preview Image */
+    .preview-box {
+      margin-top: 10px;
+      border-radius: 10px;
+      overflow: hidden;
+      background: #EEF2FF;
+      aspect-ratio: 16/9;
+      max-width: 320px;
+      display: none;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .preview-box img { width: 100%; height: 100%; object-fit: cover; }
+
+    .btn-submit {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      padding: 13px 28px;
+      background: var(--primary);
+      color: #fff;
+      border: none;
+      border-radius: 10px;
+      font-family: 'Sarabun', sans-serif;
+      font-size: 1rem;
+      font-weight: 700;
+      cursor: pointer;
+      transition: background 0.18s, transform 0.12s;
+    }
+
+    .btn-submit:hover { background: var(--primary-dark); }
+    .btn-submit:active { transform: scale(0.97); }
+    .btn-submit:disabled { opacity: 0.6; cursor: not-allowed; }
+
+    /* ===== TOAST ===== */
+    #toast {
+      position: fixed;
+      bottom: 28px;
+      left: 50%;
+      transform: translateX(-50%) translateY(80px);
+      background: #1A1D2E;
+      color: #fff;
+      padding: 13px 22px;
+      border-radius: 50px;
+      font-size: 0.95rem;
+      font-weight: 600;
+      transition: transform 0.3s ease;
+      z-index: 500;
+      white-space: nowrap;
+    }
+
+    #toast.show { transform: translateX(-50%) translateY(0); }
+    #toast.success { background: var(--success); }
+    #toast.error { background: var(--danger); }
+
+    /* ===== TABLE ===== */
+    .table-wrap { overflow-x: auto; }
+
+    table {
+      width: 100%;
+      border-collapse: collapse;
+    }
+
+    th {
+      text-align: left;
+      font-size: 0.8rem;
+      font-weight: 700;
+      color: var(--text-muted);
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+      padding: 12px 16px;
+      border-bottom: 2px solid var(--border);
+    }
+
+    td {
+      padding: 14px 16px;
+      border-bottom: 1px solid var(--border);
+      vertical-align: middle;
+      font-size: 0.92rem;
+    }
+
+    tr:last-child td { border-bottom: none; }
+
+    tr:hover td { background: #F8FAFF; }
+
+    .thumb {
+      width: 60px;
+      height: 40px;
+      border-radius: 6px;
+      object-fit: cover;
+      background: #EEF2FF;
+    }
+
+    .no-thumb {
+      width: 60px;
+      height: 40px;
+      border-radius: 6px;
+      background: #EEF2FF;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 1.2rem;
+    }
+
+    .link-cell a {
+      color: var(--primary);
+      text-decoration: none;
+      font-weight: 600;
+      font-size: 0.82rem;
+    }
+
+    .btn-delete {
+      padding: 7px 14px;
+      background: transparent;
+      border: 1.5px solid var(--danger);
+      color: var(--danger);
+      border-radius: 8px;
+      font-family: 'Sarabun', sans-serif;
+      font-size: 0.85rem;
+      font-weight: 600;
+      cursor: pointer;
+      transition: all 0.15s;
+    }
+
+    .btn-delete:hover {
+      background: var(--danger);
+      color: #fff;
+    }
+
+    .name-cell { font-weight: 700; max-width: 200px; }
+
+    .empty-row td {
+      text-align: center;
+      color: var(--text-muted);
+      padding: 40px;
+    }
+  </style>
+</head>
+<body>
+
+<!-- LOGIN OVERLAY -->
+<div id="loginOverlay">
+  <div class="login-box">
+    <div class="lock">🔐</div>
+    <h2>หน้าแอดมิน</h2>
+    <p>กรอกรหัสผ่านเพื่อเข้าสู่ระบบ</p>
+    <input type="password" id="pwInput" placeholder="รหัสผ่าน" />
+    <button onclick="checkLogin()">เข้าสู่ระบบ</button>
+    <div class="login-error" id="loginError"></div>
+  </div>
+</div>
+
+<!-- HEADER -->
+<header>
+  <div class="header-left">
+    <span>⚙️</span>
+    <h1>จัดการแบบทดสอบ</h1>
+  </div>
+  <a href="index.html" class="back-link">← กลับหน้าหลัก</a>
+</header>
+
+<main>
+
+  <!-- ADD FORM CARD -->
+  <div class="card">
+    <div class="card-header">
+      <span>➕</span>
+      <h2>เพิ่มแบบทดสอบใหม่</h2>
+    </div>
+    <div class="card-body">
+      <div class="field">
+        <label>ชื่อแบบทดสอบ *</label>
+        <input type="text" id="inputName" placeholder="เช่น แบบทดสอบวิชาคณิตศาสตร์ บทที่ 1" />
+      </div>
+
+      <div class="field">
+        <label>ลิงก์ Google Form *</label>
+        <input type="url" id="inputFormUrl" placeholder="https://forms.google.com/..." />
+      </div>
+
+      <div class="field">
+        <label>ลิงก์ภาพตัวอย่าง</label>
+        <input type="url" id="inputImageUrl" placeholder="https://..." oninput="previewImage(this.value)" />
+        <div class="hint">แนะนำ: อัปโหลดรูปลง Google Drive แล้วเปลี่ยนเป็นลิงก์ direct (หรือใช้ imgur.com)</div>
+        <div class="preview-box" id="previewBox">
+          <img id="previewImg" alt="ตัวอย่าง" />
+        </div>
+      </div>
+
+      <button class="btn-submit" id="submitBtn" onclick="addForm()">
+        <span>💾</span> บันทึก
+      </button>
+    </div>
+  </div>
+
+  <!-- LIST CARD -->
+  <div class="card">
+    <div class="card-header">
+      <span>📋</span>
+      <h2>รายการแบบทดสอบทั้งหมด</h2>
+    </div>
+    <div class="card-body" style="padding:0">
+      <div class="table-wrap">
+        <table>
+          <thead>
+            <tr>
+              <th>ภาพ</th>
+              <th>ชื่อ</th>
+              <th>ลิงก์ฟอร์ม</th>
+              <th></th>
+            </tr>
+          </thead>
+          <tbody id="tableBody">
+            <tr class="empty-row"><td colspan="4">กำลังโหลด...</td></tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+
+</main>
+
+<div id="toast"></div>
+
+<script>
+  // 🔧 ใส่ URL ของ Apps Script ที่ Deploy แล้วตรงนี้
+  const API_URL = "https://script.google.com/macros/s/AKfycbx_ENJmWWIdvcXVyJHZvOeF2BLP6ZmpE7cu77EHHctnt_ge4x21v8_2sT92PLVTkmOW/exec";
+
+  let savedPassword = "";
+  let allItems = [];
+
+  /* ===== LOGIN ===== */
+  function checkLogin() {
+    const pw = document.getElementById("pwInput").value;
+    if (pw === "admin0") {
+      savedPassword = pw;
+      document.getElementById("loginOverlay").style.display = "none";
+      loadData();
+    } else {
+      document.getElementById("loginError").textContent = "รหัสผ่านไม่ถูกต้อง";
+    }
+  }
+
+  document.getElementById("pwInput").addEventListener("keydown", e => {
+    if (e.key === "Enter") checkLogin();
+  });
+
+  /* ===== LOAD DATA ===== */
+  async function loadData() {
+    try {
+      const res = await fetch(API_URL);
+      const json = await res.json();
+      if (json.success) {
+        allItems = json.data.reverse();
+        renderTable(allItems);
+      }
+    } catch (err) {
+      console.error(err);
+    }
+  }
+
+  function renderTable(items) {
+    const tbody = document.getElementById("tableBody");
+    if (items.length === 0) {
+      tbody.innerHTML = `<tr class="empty-row"><td colspan="4">ยังไม่มีข้อมูล</td></tr>`;
+      return;
+    }
+    tbody.innerHTML = items.map(item => `
+      <tr>
+        <td>
+          ${item.imageUrl
+            ? `<img class="thumb" src="${escHtml(item.imageUrl)}" alt="" onerror="this.outerHTML='<div class=\'no-thumb\'>📝</div>'" />`
+            : `<div class="no-thumb">📝</div>`}
+        </td>
+        <td class="name-cell">${escHtml(item.name)}</td>
+        <td class="link-cell"><a href="${escHtml(item.formUrl)}" target="_blank">เปิดฟอร์ม ↗</a></td>
+        <td>
+          <button class="btn-delete" onclick="deleteForm('${escAttr(item.timestamp)}')">ลบ</button>
+        </td>
+      </tr>
+    `).join("");
+  }
+
+  /* ===== ADD ===== */
+  async function addForm() {
+    const name = document.getElementById("inputName").value.trim();
+    const formUrl = document.getElementById("inputFormUrl").value.trim();
+    const imageUrl = document.getElementById("inputImageUrl").value.trim();
+
+    if (!name || !formUrl) {
+      showToast("กรุณากรอกชื่อและลิงก์ฟอร์ม", "error");
+      return;
+    }
+
+    const btn = document.getElementById("submitBtn");
+    btn.disabled = true;
+    btn.innerHTML = "⏳ กำลังบันทึก...";
+
+    try {
+      const res = await fetch(API_URL, {
+        method: "POST",
+        body: JSON.stringify({ action: "add", password: savedPassword, name, formUrl, imageUrl })
+      });
+      const json = await res.json();
+      if (json.success) {
+        showToast("เพิ่มแบบทดสอบสำเร็จ ✓", "success");
+        document.getElementById("inputName").value = "";
+        document.getElementById("inputFormUrl").value = "";
+        document.getElementById("inputImageUrl").value = "";
+        document.getElementById("previewBox").style.display = "none";
+        loadData();
+      } else {
+        showToast(json.message || "เกิดข้อผิดพลาด", "error");
+      }
+    } catch (err) {
+      showToast("ไม่สามารถเชื่อมต่อได้", "error");
+    }
+
+    btn.disabled = false;
+    btn.innerHTML = "<span>💾</span> บันทึก";
+  }
+
+  /* ===== DELETE ===== */
+  async function deleteForm(timestamp) {
+    if (!confirm("ต้องการลบรายการนี้?")) return;
+    try {
+      const res = await fetch(API_URL, {
+        method: "POST",
+        body: JSON.stringify({ action: "delete", password: savedPassword, timestamp })
+      });
+      const json = await res.json();
+      if (json.success) {
+        showToast("ลบสำเร็จ", "success");
+        loadData();
+      }
+    } catch (err) {
+      showToast("เกิดข้อผิดพลาด", "error");
+    }
+  }
+
+  /* ===== PREVIEW ===== */
+  function previewImage(url) {
+    const box = document.getElementById("previewBox");
+    const img = document.getElementById("previewImg");
+    if (url) {
+      box.style.display = "flex";
+      img.src = url;
+      img.onerror = () => { box.style.display = "none"; };
+    } else {
+      box.style.display = "none";
+    }
+  }
+
+  /* ===== TOAST ===== */
+  function showToast(msg, type = "") {
+    const t = document.getElementById("toast");
+    t.textContent = msg;
+    t.className = "show " + type;
+    setTimeout(() => { t.className = ""; }, 3000);
+  }
+
+  function escHtml(str) {
+    return str?.replace(/&/g,"&amp;").replace(/</g,"&lt;").replace(/>/g,"&gt;").replace(/"/g,"&quot;") || "";
+  }
+
+  function escAttr(str) {
+    return str?.replace(/'/g, "\\'") || "";
+  }
+</script>
+</body>
+</html>
